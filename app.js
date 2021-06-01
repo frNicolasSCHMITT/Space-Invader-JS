@@ -1,14 +1,13 @@
 
+let missile = new Sprite ("./images/missile.png", 0, 0);
+    missile.display = "none";
+
 let vaisseau = new Sprite ("./images/vaisseau.png", 740, 700);  //("source", top, left);
 let alien1 = new Sprite ("./images/alien1.png", 100, 50);
 let alien2 = new Sprite ("./images/alien2.png", 400, 50);
 let alien3 = new Sprite ("./images/alien3.png", 700, 50);
 let alien4 = new Sprite ("./images/alien4.png", 1000, 50);
 let alien5 = new Sprite ("./images/alien5.png", 1300, 50);
-
-let missile = new Sprite ("./images/missile.png", 0, 0);
-missile.display = "none";
-
 
 function Sprite( filename, left, top ) {  //fonction de construction d'objet donc nom avec majuscule au début
     this._node = document.createElement("img");  //crée un élément de type img
@@ -83,4 +82,27 @@ document.onkeydown = function(event){  //track de la touche pressée
         vaisseau.top += 10;
         vaisseau.left += 10;
     }
+
+    //Pour limiter les déplacements sur l'axe X à l'écran visible
+    if (vaisseau.left < 0) {
+        vaisseau.left = 0;
+    }   
+    if (vaisseau.left > document.body.clientWidth - vaisseau._node.width) {
+        vaisseau.left = document.body.clientWidth - vaisseau._node.width;
+    }
+
+    //Pour limiter les déplacements sur l'axe Y à l'écran visible
+    if (vaisseau.top < 0) {
+        vaisseau.top = 0;
+    }   
+    if (vaisseau.top > document.body.clientHeight - vaisseau._node.height) {
+        vaisseau.top = document.body.clientHeight - vaisseau._node.height;
+    }
+
+    if(event.keyCode == 32){            // touche SPACEBAR = Tir missile
+        missile.display = "block";
+        missile.top = vaisseau.top; //positionne le missile sous le vaisseau
+        missile.left = vaisseau.left + (vaisseau._node.width - missile._node.width) / 2; //au centre du V
+    }
+
 };
