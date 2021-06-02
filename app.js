@@ -79,6 +79,8 @@ Sprite.prototype.checkCollision = function (other){     //collision si n'est pas
 let missile = new Sprite ("./images/missile.png", 0, 0);
     missile.display = "none";
 
+let explosion = [];
+
 let vaisseau = new Sprite ("./images/vaisseau.png", 740, 700);
 
 document.onkeydown = function(event){  //track de la touche pressée
@@ -144,6 +146,8 @@ let alien = [];
 
 for(let i=1; i<=5; i++){
         alien[i] = new Sprite("./images/alien"+(Math.floor(Math.random() * 5)+1)+".png", i * 100, 20);
+        explosion[i] = new Sprite("./images/explosion"+ i +".gif", 0, 0);
+        explosion[i].display = "none";
     alien[i].startAnimation(moveAlienToRight, 30);
 }
 
@@ -161,7 +165,11 @@ function moveMissile(missile){
             missile.stopAnimation();
             missile.display = "none";
             alien[i].stopAnimation();
+            explosion[i].top = alien[i].top;
+            explosion[i].left = alien[i].left;
             alien[i].display = "none";
+            explosion[i].display = "block";
+            setDelay(i)
         }
     }
 }
@@ -172,6 +180,12 @@ function moveAlienToRight(alien){
         alien.top += 50;        //descend d'un étage
         alien.startAnimation(moveAlienToLeft, 30);     //Puis va dans l'autre sens
     }
+}
+
+function setDelay(i){
+    setTimeout(function(){
+        explosion[i].display = "none";
+    },2000)
 }
 
 function moveAlienToLeft(alien){
