@@ -79,7 +79,7 @@ Sprite.prototype.checkCollision = function (other){     //collision si n'est pas
 let missile = new Sprite ("./images/missile.png", 0, 0);
     missile.display = "none";
 
-let explosion = [];
+// let explosion = [];
 
 let vaisseau = new Sprite ("./images/vaisseau.png", 740, 700);
 
@@ -145,10 +145,10 @@ document.onkeydown = function(event){  //track de la touche pressée
 let alien = [];
 
 function generateAlien(){
-    for(let i=1; i<=5; i++){
+    for(let i=1; i<=25; i++){
         alien[i] = new Sprite("./images/alien"+(Math.floor(Math.random() * 5)+1)+".png", i * 100, 20);
-        explosion[i] = new Sprite("./images/explosion"+ i +".gif", 0, 0);
-        explosion[i].display = "none";
+        // explosion[i] = new Sprite("./images/explosion"+(Math.floor(Math.random() * 5)+1)+".gif", 0, 0);
+        // explosion[i].display = "none";
     alien[i].startAnimation(moveAlienToRight, 30);
     }   
     generationTimeOut()
@@ -159,7 +159,7 @@ generateAlien();
 function generationTimeOut(){
     setTimeout(function(){
         generateAlien();
-    },10000);
+    },60000);
 }
 
 
@@ -170,18 +170,21 @@ function moveMissile(missile){
         missile.display = "none";
     }  //clear les missiles off-screen
 
-    for(let i=1; i<=5; i++){
+    for(let i=1; i<=25; i++){
 
         if (alien[i].display == "none") continue;
         if (missile.checkCollision(alien[i])){
             missile.stopAnimation();
             missile.display = "none";
             alien[i].stopAnimation();
-            explosion[i].top = alien[i].top;
-            explosion[i].left = alien[i].left;
-            alien[i].display = "none";
-            explosion[i].display = "block";
-            setDelay(i)
+            alien[i]._node.src = "./images/explosion.gif";
+            setTimeout(function(){
+                alien[i].display = "none";
+            },500)
+            // explosion[i].top = alien[i].top;
+            // explosion[i].left = alien[i].left;
+            // explosion[i].display = "block";
+            // setDelay(i)
         }
     }
 }
@@ -192,13 +195,14 @@ function moveAlienToRight(alien){
         alien.top += 50;        //descend d'un étage
         alien.startAnimation(moveAlienToLeft, 30);     //Puis va dans l'autre sens
     }
+    gameOver();
 }
 
-function setDelay(i){
-    setTimeout(function(){
-        explosion[i].display = "none";
-    },2000)
-}
+// function setDelay(i){
+//     setTimeout(function(){
+//         // explosion[i].display = "none";
+//     },2000)
+// }
 
 function moveAlienToLeft(alien){
     alien.left -= 10;   //déplace les Aliens de 10 px vers la gauche / refresh
@@ -206,7 +210,24 @@ function moveAlienToLeft(alien){
         alien.top += 50;    //descend d'un étage
         alien.startAnimation(moveAlienToRight, 30);    //Puis va dans l'autre sens
     }
+    gameOver();
 }
+
+//------------------------------------------game over
+function gameOver(){
+    for(let i=1; i<=25; i++){
+        if (vaisseau.checkCollision(alien[i])){
+            if (confirm("Game Over, voulez vous réessayer?")){
+                vaisseau.top = -100 ;
+                window.location.reload(true);
+            }
+            else {
+                prompt("Entrez votre Nom pour le score :")
+            }
+        }
+    }
+}
+gameOver();
 
 // for(let i=1; i<=15; i++){       //variable où i= n° Alien
 //     window["alien"+i].startAnimation(moveAlienToRight, 100);
