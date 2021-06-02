@@ -225,6 +225,15 @@ function gameOver(){
                 prompt("Entrez votre Nom pour le score :")
             }
         }
+        else if (alien[i].top > document.body.clientHeight - alien[i]._node.height){
+            vaisseau.top = -100 ;
+            if (confirm("Game Over, voulez vous réessayer?")){
+                window.location.reload(true);
+            }
+            else {
+                prompt("Entrez votre Nom pour le score :")
+            }
+        }
     }
 }
 gameOver();
