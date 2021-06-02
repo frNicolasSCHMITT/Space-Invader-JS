@@ -144,12 +144,24 @@ document.onkeydown = function(event){  //track de la touche pressée
 
 let alien = [];
 
-for(let i=1; i<=5; i++){
+function generateAlien(){
+    for(let i=1; i<=5; i++){
         alien[i] = new Sprite("./images/alien"+(Math.floor(Math.random() * 5)+1)+".png", i * 100, 20);
         explosion[i] = new Sprite("./images/explosion"+ i +".gif", 0, 0);
         explosion[i].display = "none";
     alien[i].startAnimation(moveAlienToRight, 30);
+    }   
+    generationTimeOut()
 }
+
+generateAlien();
+
+function generationTimeOut(){
+    setTimeout(function(){
+        generateAlien();
+    },10000);
+}
+
 
 function moveMissile(missile){
     missile.top -=10;  //déplacement du missile en px / refresh fonction startAnimation(moveMissile)
